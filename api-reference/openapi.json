@@ -1,216 +1,2609 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
+  "openapi": "3.0.0",
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Login/Signup User"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/helper/check-wallet-addresses": {
+      "post": {
+        "operationId": "HelperController_checkWalletAddresses",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HelperWalletAddressesDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Check Wallet Adderesses for invalidity"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
+      }
+    },
+    "/api/v1/helper/search-token/placeholder": {
+      "get": {
+        "operationId": "HelperController_searchTokenPlaceholder",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Search token placeholder tokens, when query is empty this will be showen"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
+      }
+    },
+    "/api/v1/helper/search-token/placeholder/stream": {
+      "get": {
+        "operationId": "HelperController_searchTokenPlaceholderStream",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Search token placeholder tokens, when query is empty this will be showen"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
+      }
+    },
+    "/api/v1/helper/search-token/stream": {
+      "get": {
+        "operationId": "HelperController_searchTokenStream",
+        "parameters": [
+          {
+            "name": "search_query",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
+            "description": ""
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
+          "default": {
+            "description": "Search Token for given search query"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
+      }
+    },
+    "/api/v1/helper/search-token": {
+      "get": {
+        "operationId": "HelperController_searchToken",
+        "parameters": [
+          {
+            "name": "search_query",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "type": "string"
             }
           }
-        }
-      },
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Search Token for given search query"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
+      }
+    },
+    "/api/v1/helper/withdraw": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "operationId": "HelperController_withDrawAgentToken",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Plant to add to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
+                "$ref": "#/components/schemas/HelperWithdrawDTO"
               }
             }
           }
-        }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Withdraw from agent wallet"
+          }
+        },
+        "tags": [
+          "Helper"
+        ]
       }
     },
-    "/plants/{id}": {
+    "/api/v1/flow/edges": {
+      "get": {
+        "operationId": "EdgesController_getEdgeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get edge by edge id"
+          }
+        },
+        "tags": [
+          "Edges"
+        ]
+      },
+      "post": {
+        "operationId": "EdgesController_createEdge",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEdgeBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create edge for flow"
+          }
+        },
+        "tags": [
+          "Edges"
+        ]
+      },
+      "patch": {
+        "operationId": "EdgesController_updateEdgeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEdgeByIDBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Update edge by edge id"
+          }
+        },
+        "tags": [
+          "Edges"
+        ]
+      },
       "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+        "operationId": "EdgesController_deleteEdgeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Delete edge by edge id"
+          }
+        },
+        "tags": [
+          "Edges"
+        ]
+      }
+    },
+    "/api/v1/flow/nodes": {
+      "post": {
+        "operationId": "NodesController_createNode",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "node_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNodeBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create node for flow. Node type is required"
+          }
+        },
+        "tags": [
+          "Nodes"
+        ]
+      },
+      "get": {
+        "operationId": "NodesController_getNodeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "node_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get node by node id"
+          }
+        },
+        "tags": [
+          "Nodes"
+        ]
+      },
+      "patch": {
+        "operationId": "NodesController_updateNodeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNodeByIDBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Update node by node id. The node data is using upsert method, just give the desired properties."
+          }
+        },
+        "tags": [
+          "Nodes"
+        ]
+      },
+      "delete": {
+        "operationId": "NodesController_deleteNodeByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Delete node bu node id"
+          }
+        },
+        "tags": [
+          "Nodes"
+        ]
+      }
+    },
+    "/api/v1/flow/nodes/validations": {
+      "get": {
+        "operationId": "NodesController_getNodeInvalidations",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agent_name",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get node invalidations"
+          }
+        },
+        "tags": [
+          "Nodes"
+        ]
+      }
+    },
+    "/api/v1/flow/main": {
+      "post": {
+        "operationId": "FlowController_createFlow",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFlowBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create flow for agent. Do not use for create flow, this is experimental"
+          }
+        },
+        "tags": [
+          "Flow"
+        ]
+      },
+      "get": {
+        "operationId": "FlowController_getFlowByAgentID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get flow by agent id"
+          }
+        },
+        "tags": [
+          "Flow"
+        ]
+      },
+      "delete": {
+        "operationId": "FlowController_deleteFlowByAgentID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFlowBodyDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Delete flow, not the agent. Agent deletion is not possible for now."
+          }
+        },
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
+    "/api/v1/flow/main/self": {
+      "get": {
+        "operationId": "FlowController_getFlowByID",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get flow by flow id"
+          }
+        },
+        "tags": [
+          "Flow"
+        ]
+      }
+    },
+    "/api/v1/agent/list": {
+      "get": {
+        "operationId": "AgentController_listAgents",
+        "parameters": [
+          {
+            "name": "listing_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "date",
+                "capital",
+                "pnl"
+              ]
+            }
+          },
+          {
+            "name": "sorting_type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "List agents by listing type"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/search": {
+      "get": {
+        "operationId": "AgentController_searchAgents",
+        "parameters": [
+          {
+            "name": "search_query",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Search agent by query"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/single": {
+      "get": {
+        "operationId": "AgentController_getSingleAgentByAgentName",
+        "parameters": [
+          {
+            "name": "agent_name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "graphic_date_type",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get single agent by agent name"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/publish": {
+      "put": {
+        "operationId": "AgentController_publishAgent",
+        "parameters": [
+          {
+            "name": "client_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Publish Agent"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/draft": {
+      "delete": {
+        "operationId": "AgentController_deleteDraftAgent",
+        "parameters": [
+          {
+            "name": "client_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Delete draft Agent"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/new/preset": {
+      "post": {
+        "operationId": "AgentController_createAgentWithPreset",
+        "parameters": [
+          {
+            "name": "preset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BASIC",
+                "TARGET_WALLET",
+                "TARGET_TOKEN",
+                "TARGET_ECOSYSTEM",
+                "TOKEN_CLANKER"
+              ]
+            }
+          },
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create New agent with preset"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/new": {
+      "post": {
+        "operationId": "AgentController_createAgent",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create New agent"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/agent/self": {
+      "get": {
+        "operationId": "AgentController_getAgentByAgentID",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
+            "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": ""
           },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
+          "default": {
+            "description": "Get Agent by ID"
+          }
+        },
+        "tags": [
+          "Agent"
+        ]
+      }
+    },
+    "/api/v1/profile/activities/seen-all": {
+      "put": {
+        "operationId": "ProfileController_setAllActivitiesToSeen",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
             }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Send activities seen for set all activities state to seen"
+          }
+        },
+        "tags": [
+          "Profile"
+        ]
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    },
+    "/api/v1/profile/agent": {
+      "get": {
+        "operationId": "ProfileController_getProfileAgentData",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agent_type",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "published",
+                "draft"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get agent data for user. Published or Draft types are supported."
+          }
+        },
+        "tags": [
+          "Profile"
+        ]
+      }
+    },
+    "/api/v1/agent/tasks": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "operationId": "AgentTasksController_createTaskForAgent",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create new task for agent flow"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      },
+      "put": {
+        "operationId": "AgentTasksController_updateAgentTask",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "task_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Update agent task for flow"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      },
+      "delete": {
+        "operationId": "AgentTasksController_deleteTaskFromAgent",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "task_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Delete a task from agent flow"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      }
+    },
+    "/api/v1/agent/tasks/start": {
+      "post": {
+        "operationId": "AgentTasksController_startAgentTask",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Plant added to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/StartAgentTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Start agent task - Restart agent Task ( IF paused )"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      }
+    },
+    "/api/v1/agent/tasks/pause": {
+      "patch": {
+        "operationId": "AgentTasksController_pauseAgentTask",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PauseAgentTaskDTO"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": ""
+          },
+          "default": {
+            "description": "Pause agent task - Hibernation, does not delete schedules, stops the condition checks and waits for restarting"
           }
-        }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+    },
+    "/api/v1/agent/tasks/stop": {
+      "patch": {
+        "operationId": "AgentTasksController_stopAgentTask",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
           }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopAgentTaskDTO"
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Stop agent task - Immediate stop and deletes all schedules"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      }
+    },
+    "/api/v1/agent/tasks/restart": {
+      "patch": {
+        "operationId": "AgentTasksController_restartAgentTask",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestartAgentTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Stop agent task - Immediate stop and deletes all schedules"
+          }
+        },
+        "tags": [
+          "AgentTasks"
+        ]
+      }
+    },
+    "/api/v1/credit/packages": {
+      "get": {
+        "operationId": "CreditController_getCreditPackages",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "discount_code",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "default": {
+            "description": "Get  credit packages"
+          }
+        },
+        "tags": [
+          "Credit"
+        ]
+      }
+    },
+    "/api/v1/activities/create/deposit": {
+      "post": {
+        "operationId": "ActivitiesController_createDepositActivity",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createDepositActivityDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "default": {
+            "description": "Create deposit activity for user"
+          }
+        },
+        "tags": [
+          "Activities"
+        ]
+      }
+    },
+    "/api/v1/paywall/credit/create-order": {
+      "post": {
+        "operationId": "PaywallController_createOrder",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Paywall"
+        ]
+      }
+    },
+    "/api/v1/paywall/credit/confirm-order": {
+      "post": {
+        "operationId": "PaywallController_confirmOrder",
+        "parameters": [
+          {
+            "name": "x-message",
+            "in": "header",
+            "description": "Message of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "description": "The wallet address of user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "description": "Signature string of auth signature",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Paywall"
+        ]
+      }
+    },
+    "/credit-earn": {
+      "post": {
+        "operationId": "CreditEarnController_createEarnModel",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreditEarnModelDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CreditEarn"
+        ]
+      }
+    },
+    "/credit-earn/all": {
+      "get": {
+        "operationId": "CreditEarnController_getEaernModels",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CreditEarn"
+        ]
+      }
+    },
+    "/credit-earn/{id}": {
+      "get": {
+        "operationId": "CreditEarnController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "CreditEarn"
         ]
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
+      "patch": {
+        "operationId": "CreditEarnController_updateEarnModel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCreditEarnModelDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "CreditEarn"
+        ]
+      },
+      "delete": {
+        "operationId": "CreditEarnController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CreditEarn"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Tinylabs SAM API documentation",
+    "description": "Tinylabs SAM API documentation. Includes all endpoints",
+    "version": "1.0.0",
+    "contact": {
+
+    }
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "Wallet": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
+          "id": {
+            "type": "string"
           },
-          "message": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "value"
+        ]
+      },
+      "HelperWalletAddressesDTO": {
+        "type": "object",
+        "properties": {
+          "wallets": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Wallet"
+            }
+          }
+        },
+        "required": [
+          "wallets"
+        ]
+      },
+      "HelperWithdrawDTO": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "token_address": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "image_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id",
+          "token_address",
+          "amount"
+        ]
+      },
+      "CreateEdgeBodyDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "animated": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "sourceHandle": {
+            "type": "string"
+          },
+          "targetHandle": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "animated",
+          "source",
+          "target"
+        ]
+      },
+      "UpdateEdgeByIDBodyDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "animated": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "sourceHandle": {
+            "type": "string"
+          },
+          "targetHandle": {
             "type": "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      },
+      "CreateNodeBodyDTO": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "AgentFlowToken": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "decimals": {
+            "type": "number"
+          },
+          "address": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "symbol",
+          "decimals",
+          "address"
+        ]
+      },
+      "AgentFlowTask": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "AgentFlowCondition": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "seperator": {
+            "type": "object"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "spending_amount": {
+            "type": "number"
+          },
+          "spending_method": {
+            "type": "string"
+          },
+          "date_type": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "type",
+          "operator",
+          "amount"
+        ]
+      },
+      "AgentFlowNodeDataType": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "metadata_open": {
+            "type": "boolean"
+          },
+          "x": {
+            "type": "string"
+          },
+          "farcaster": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "implemented_to_client": {
+            "type": "boolean"
+          },
+          "trigger_threshold": {
+            "type": "number"
+          },
+          "accordion_open": {
+            "type": "boolean"
+          },
+          "spending_method": {
+            "type": "string"
+          },
+          "spending_amount": {
+            "type": "number"
+          },
+          "token": {
+            "$ref": "#/components/schemas/AgentFlowToken"
+          },
+          "token_in": {
+            "$ref": "#/components/schemas/AgentFlowToken"
+          },
+          "token_out": {
+            "$ref": "#/components/schemas/AgentFlowToken"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentFlowTask"
+            }
+          },
+          "ecosystems": {
+            "type": "object"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgentFlowCondition"
+            }
+          },
+          "condition": {
+            "$ref": "#/components/schemas/AgentFlowCondition"
+          },
+          "alert_limit_per_day": {
+            "type": "number"
+          },
+          "target_type": {
+            "type": "string"
+          },
+          "wallet_execution_settings": {
+            "type": "string"
+          },
+          "wallet_condition_type": {
+            "type": "string"
+          },
+          "sub_type": {
+            "type": "string"
+          },
+          "sub_amount": {
+            "type": "number"
+          },
+          "wallets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "percentage": {
+            "type": "number"
+          },
+          "is_running": {
+            "type": "boolean"
+          },
+          "more_open": {
+            "type": "boolean"
+          },
+          "custodial_wallet_address": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "implemented_to_client"
+        ]
+      },
+      "AgentFlowNodePosition": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "UpdateNodeByIDBodyDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AgentFlowNodeDataType"
+          },
+          "position": {
+            "$ref": "#/components/schemas/AgentFlowNodePosition"
+          },
+          "accordion_open": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateFlowBodyDTO": {
+        "type": "object",
+        "properties": {
+
+        }
+      },
+      "Object": {
+        "type": "object",
+        "properties": {
+
+        }
+      },
+      "StartAgentTaskDTO": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "node_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "main_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "node_ids",
+          "main_ids",
+          "client_id"
+        ]
+      },
+      "PauseAgentTaskDTO": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ]
+      },
+      "StopAgentTaskDTO": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ]
+      },
+      "RestartAgentTaskDTO": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "node_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "main_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "node_ids",
+          "main_ids",
+          "client_id"
+        ]
+      },
+      "createDepositActivityDTO": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "token_symbol": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "tx": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id",
+          "token_symbol",
+          "amount",
+          "image_url",
+          "tx"
+        ]
+      },
+      "PostCreditEarnModelDTO": {
+        "type": "object",
+        "properties": {
+          "token_per_credit": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token_per_credit",
+          "min",
+          "max",
+          "address"
+        ]
+      },
+      "UpdateCreditEarnModelDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "token_per_credit": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
       }
     }
   }
